@@ -41,13 +41,13 @@ import java.util.TimerTask;
 @Component(metatype = true, immediate = true)
 public class JMXetricComponent {
 
-    @Property(value = "localhost", description = "the multicast or unicast address that is used to publish metrics to the ganglia gmond process")
+    @Property(value = "127.0.0.1", description = "the multicast or unicast address that is used to publish metrics to the ganglia gmond process")
     public static final String GMOND_HOST = "host";
     @Property(intValue = 8649, description = "the multicast group or unicast port that is used to publish metrics to the ganglia gmond process.")
     public static final String GMOND_PORT = "port";
     @Property(boolValue = false, description = "If true, multicast, if false unicast")
     public static final String GMOND_MULTICAST = "multicast";
-    @Property(boolValue = false, description = "If true, use 3.1.x wire format, if false use earler wire format.")
+    @Property(boolValue = true, description = "If true, use 3.1.x wire format, if false use earler wire format.")
     public static final String GMOND_WIRE_FORMAT_31X = "wireformat31x";
     @Property(value = "", description = "An IP:hostname pair that will be used to spoof the metric host information..")
     public static final String GMOND_SPOOF = "spoof";
