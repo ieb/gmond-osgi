@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE jmxetric-config [
+   <!ELEMENT jmxetric-config (sample|ganglia|jvm)*>
+   <!ELEMENT sample (mbean)*>
+      <!ATTLIST sample delay CDATA #REQUIRED>
+      <!ATTLIST sample initialdelay CDATA "0">
+      <!ATTLIST sample dmax CDATA "0" >
+   <!ELEMENT mbean (attribute)*>
+      <!ATTLIST mbean name CDATA #REQUIRED>
+      <!ATTLIST mbean pname CDATA #REQUIRED>
+   <!ELEMENT attribute (composite*)>
+      <!ATTLIST attribute name CDATA #REQUIRED>
+      <!ATTLIST attribute type CDATA "" >
+      <!ATTLIST attribute units CDATA "" >
+      <!ATTLIST attribute pname CDATA "" >
+      <!ATTLIST attribute slope CDATA "both" >
+      <!ATTLIST attribute dmax CDATA "0" >
+   <!ELEMENT composite EMPTY>
+      <!ATTLIST composite name CDATA #REQUIRED>
+      <!ATTLIST composite type CDATA "" >
+      <!ATTLIST composite units CDATA "" >
+      <!ATTLIST composite pname CDATA "" >
+      <!ATTLIST composite slope CDATA "both" >
+      <!ATTLIST composite dmax CDATA "0" >
+   <!ELEMENT ganglia EMPTY>
+      <!ATTLIST ganglia hostname CDATA #REQUIRED>
+      <!ATTLIST ganglia port CDATA #REQUIRED>
+      <!ATTLIST ganglia mode CDATA #REQUIRED>
+      <!ATTLIST ganglia wireformat31x CDATA #REQUIRED>
+   <!ELEMENT jvm EMPTY>
+      <!ATTLIST jvm process CDATA "">
+]>
+<jmxetric-config>
+	<jvm process="ProcessName"/>
+	<sample initialdelay="20" delay="60">
+		<mbean name="java.lang:type=Memory" pname="Memory">
+			<attribute name="HeapMemoryUsage">
+				<composite name="init" pname="Heap_init" type="int32" units="bytes"/>
+				<composite name="committed" pname="Heap_committed" type="int32" units="bytes"/>
+				<composite name="used" pname="Heap_used" type="int32" units="bytes" />
+				<composite name="max" pname="Heap_max" type="int32" units="bytes" />
+			</attribute>
+			<attribute name="NonHeapMemoryUsage" >
+				<composite name="init" pname="NonHeap_init" type="int32"  units="bytes" />
+				<composite name="committed" pname="NonHeap_committed" type="int32" units="bytes" />
+				<composite name="used" pname="NonHeap_used" type="int32" units="bytes" />
+				<composite name="max" pname="NonHeap_max" type="int32" units="bytes" />
+			</attribute>
+		</mbean>
+		<mbean name="java.lang:type=Threading" pname="Threading" >
+			<attribute name="ThreadCount" type="int16" />
+			<attribute name="DaemonThreadCount" type="int16" />
+		</mbean>
+		<mbean name="java.lang:type=OperatingSystem" pname="OS" >
+			<attribute name="ProcessCpuTime" type="int32" slope="positive"/>
+			<!-- File descriptors can only be monitored on UNIX/Linux JVMs, not Windows -->
+			<!-- <attribute name="OpenFileDescriptorCount" type="int32" units="bytes"/>
+			<attribute name="MaxFileDescriptorCount" type="int32" units="bytes"/> -->
+		</mbean>
+		<mbean name="java.nio:type=BufferPool,name=direct" pname="DirectBufferPool" >
+			<attribute name="Count" type="int16" />
+			<attribute name="MemoryUsed" type="int32" units="bytes" />
+			<attribute name="TotalCapacity" type="int32" units="bytes" />
+		</mbean>
+		<mbean name="java.nio:type=BufferPool,name=mapped" pname="MappedBufferPool" >
+			<attribute name="Count" type="int16" />
+			<attribute name="MemoryUsed" type="int32" units="bytes" />
+			<attribute name="TotalCapacity" type="int32" units="bytes" />
+		</mbean>
+		
+		
+		<!-- Old style Oak metrics.
+		     The Old style Oak metrics use unstable names, Tabular data and composite data which cannot easilly be
+		     used in external monitoring systems. The Beans that can be used are here -->
+
+		<mbean name='org.apache.jackrabbit.oak:name=ExtractedTextCache,type=CacheStats' pname="ExtractedTextCache" >
+			<attribute name="AverageLoadPenalty"  type="float" />
+			<attribute name="ElementCount"  type="int32"  />
+			<attribute name="EvictionCount"  type="int32" />
+			<attribute name="HitCount"  type="int32" />
+			<attribute name="HitRate"  type="float" />
+			<attribute name="LoadCount" type="int32"  />
+			<attribute name="LoadExceptionCount"  type="int32" />
+			<attribute name="LoadExceptionRate"  type="float" />
+			<attribute name="LoadSuccessCount"  type="int32" />
+			<attribute name="MaxTotalWeight"  type="int32" />
+			<attribute name="MissCount"  type="int32" />
+			<attribute name="MissRate"  type="float" />
+			<attribute name="RequestCount" type="int32"  />
+			<attribute name="TotalLoadTime" type="int32"  />
+		</mbean>
+
+		<mbean name='org.apache.jackrabbit.oak:name=Segment Cache,type=CacheStats' pname="SegmentCache" >
+			<attribute name="AverageLoadPenalty"  type="float" />
+			<attribute name="ElementCount"  type="int32"  />
+			<attribute name="EvictionCount"  type="int32" />
+			<attribute name="HitCount"  type="int32" />
+			<attribute name="HitRate"  type="float" />
+			<attribute name="LoadCount" type="int32"  />
+			<attribute name="LoadExceptionCount"  type="int32" />
+			<attribute name="LoadExceptionRate"  type="float" />
+			<attribute name="LoadSuccessCount"  type="int32" />
+			<attribute name="MaxTotalWeight"  type="int32" />
+			<attribute name="MissCount"  type="int32" />
+			<attribute name="MissRate"  type="float" />
+			<attribute name="RequestCount" type="int32"  />
+			<attribute name="TotalLoadTime" type="int32"  />
+		</mbean>
+		<mbean name='org.apache.jackrabbit.oak:name=String Cache,type=CacheStats' pname="StringCache" >
+			<attribute name="AverageLoadPenalty"  type="float" />
+			<attribute name="ElementCount"  type="int32"  />
+			<attribute name="EvictionCount"  type="int32" />
+			<attribute name="HitCount"  type="int32" />
+			<attribute name="HitRate"  type="float" />
+			<attribute name="LoadCount" type="int32"  />
+			<attribute name="LoadExceptionCount"  type="int32" />
+			<attribute name="LoadExceptionRate"  type="float" />
+			<attribute name="LoadSuccessCount"  type="int32" />
+			<attribute name="MaxTotalWeight"  type="int32" />
+			<attribute name="MissCount"  type="int32" />
+			<attribute name="MissRate"  type="float" />
+			<attribute name="RequestCount" type="int32"  />
+			<attribute name="TotalLoadTime" type="int32"  />
+		</mbean>
+
+		<mbean name="org.apache.jackrabbit.oak:name=FileStore statistics,type=FileStoreStats" pname="FileStoreStats" >
+			<attribute name="ApproximateSize"  type="int32" />
+			<attribute name="TarFileCount"  type="int32" />
+			<!-- other stats cant be reached as they are in commposite bean containing arrays -->
+		</mbean>
+
+		<mbean name="org.apache.jackrabbit.oak:name=IndexCopier support statistics,type=IndexCopierStats" pname="IndexCopierStats" >
+			<attribute name="CopyInProgressCount"  type="int32" />
+			<attribute name="CopyInProgressSize"  type="int32" />
+			<attribute name="DeletedFilesCount"  type="int32" />
+			<attribute name="DownloadCount"  type="int32" />
+
+		</mbean>
+		
+		
+		<!-- Metrics Style Oak Stats.
+		     These are newer Metrics produced by Codehale and exported to JMX. This approach to monitoring is hugely inefficent
+		     as each new bean has to be monitored explicitly. Any hierarchy in the metrics is lost. Far better to not export
+		     the metrics to JMX to be exported to Ganglia. Far better to use the Metrics Ganglia reporter that understands
+		     the Ganglia wire protocol and exports the metrics direrectly.
+		     If you have already configured the Metrics Ganglia reported, then comment this section and any other Codehale metrics JMX
+		     beans out -->
+
+		<mbean name="org.apache.jackrabbit.oak:name=HYBRID_ADDED,type=Metrics" pname="HybridAdded" >
+			<attribute name="Count"  type="int32" />
+			<attribute name="FifteenMinuteRate"  pname="m15r"  type="float" />
+			<attribute name="FiveMinuteRate"   pname="m5r" type="float" />
+			<attribute name="MeanRate"    pname="mr" type="float" />
+			<attribute name="OneMinuteRate"   pname="m1r" type="float" />
+		</mbean>
+
+		<mbean name="org.apache.jackrabbit.oak:name=HYBRID_DROPPED,type=Metrics" pname="HybridAdded" >
+			<attribute name="Count"  type="int32" />
+			<attribute name="FifteenMinuteRate"  pname="m15r"  type="float" />
+			<attribute name="FiveMinuteRate"   pname="m5r" type="float" />
+			<attribute name="MeanRate"    pname="mr" type="float" />
+			<attribute name="OneMinuteRate"   pname="m1r" type="float" />
+		</mbean>
+
+		<mbean name="org.apache.jackrabbit.oak:name=HYBRID_QUEUE_SIZE,type=Metrics" pname="HybridQueueSize" >
+			<attribute name="Count"  type="int32" />
+		</mbean>
+		<mbean name="org.apache.jackrabbit.oak:name=OBSERVATION_EVENT_AVERAGE,type=Metrics" pname="ObservationEventAverage" >
+			<attribute name="Value"  type="float" />
+		</mbean>
+		<mbean name="org.apache.jackrabbit.oak:name=OBSERVATION_EVENT_COUNTER,type=Metrics" pname="ObservationEventCounter" >
+			<attribute name="Count"  type="int32" />
+			<attribute name="FifteenMinuteRate"  pname="m15r"  type="float" />
+			<attribute name="FiveMinuteRate"   pname="m5r" type="float" />
+			<attribute name="MeanRate"    pname="mr" type="float" />
+			<attribute name="OneMinuteRate"   pname="m1r" type="float" />
+		</mbean>
+		<mbean name="org.apache.jackrabbit.oak:name=OBSERVATION_EVENT_DURATION,type=Metrics" pname="ObservationEventDuration" >
+			<attribute name="Count"  type="int32" />
+			<attribute name="FifteenMinuteRate"  pname="m15r"  type="float" />
+			<attribute name="FiveMinuteRate"   pname="m5r" type="float" />
+			<attribute name="MeanRate"    pname="mr" type="float" />
+			<attribute name="OneMinuteRate"   pname="m1r" type="float" />
+			<attribute name="50thPercentile" pname="50pc" type="float"  units="milliseconds" />
+			<attribute name="75thPercentile" pname="75pc" type="float" units="milliseconds" />
+			<attribute name="95thPercentile" pname="95pc" type="float" units="milliseconds" />
+			<attribute name="98thPercentile" pname="98pc" type="float" units="milliseconds" />
+			<attribute name="99thPercentile" pname="99pc" type="float" units="milliseconds" />
+			<attribute name="999thPercentile" pname="999pc" type="float" units="milliseconds" />
+			<attribute name="Max" pname="max" type="float" units="milliseconds" />
+			<attribute name="Mean" pname="mean" type="float" units="milliseconds" />
+			<attribute name="Min" pname="min" type="float" units="milliseconds" />
+			<attribute name="StdDev" pname="max" type="float" units="milliseconds" />
+		</mbean>
+
+		<mbean name="org.apache.jackrabbit.oak:name=QUERY_DURATION,type=Metrics" pname="QueryDuration" >
+			<attribute name="Count"  type="int32" />
+			<attribute name="FifteenMinuteRate"  pname="m15r"  type="float" />
+			<attribute name="FiveMinuteRate"   pname="m5r" type="float" />
+			<attribute name="MeanRate"    pname="mr" type="float" />
+			<attribute name="OneMinuteRate"   pname="m1r" type="float" />
+			<attribute name="50thPercentile" pname="50pc" type="float"  units="milliseconds" />
+			<attribute name="75thPercentile" pname="75pc" type="float" units="milliseconds" />
+			<attribute name="95thPercentile" pname="95pc" type="float" units="milliseconds" />
+			<attribute name="98thPercentile" pname="98pc" type="float" units="milliseconds" />
+			<attribute name="99thPercentile" pname="99pc" type="float" units="milliseconds" />
+			<attribute name="999thPercentile" pname="999pc" type="float" units="milliseconds" />
+			<attribute name="Max" pname="max" type="float" units="milliseconds" />
+			<attribute name="Mean" pname="mean" type="float" units="milliseconds" />
+			<attribute name="Min" pname="min" type="float" units="milliseconds" />
+			<attribute name="StdDev" pname="max" type="float" units="milliseconds" />
+		</mbean>
+
+
+		<mbean name="org.apache.jackrabbit.oak:name=SEGMENT_REPO_SIZE,type=Metrics" pname="SegmentRepoSize" >
+			<attribute name="Count"  type="int32" />
+		</mbean>
+
+		<mbean name="org.apache.jackrabbit.oak:name=SEGMENT_WRITES,type=Metrics" pname="SegmentWrites" >
+			<attribute name="Count"  type="int32" />
+			<attribute name="FifteenMinuteRate"  pname="m15r"  type="float" />
+			<attribute name="FiveMinuteRate"   pname="m5r" type="float" />
+			<attribute name="MeanRate"    pname="mr" type="float" />
+			<attribute name="OneMinuteRate"   pname="m1r" type="float" />
+		</mbean>
+
+		<mbean name="org.apache.jackrabbit.oak:name=SESSION_COUNT,type=Metrics" pname="SessionCount" >
+			<attribute name="Count"  type="int32" />
+		</mbean>
+
+		<mbean name="org.apache.jackrabbit.oak:name=SESSION_WRITE_COUNTER,type=Metrics" pname="SessionWriteCount" >
+			<attribute name="Count"  type="int32" />
+			<attribute name="FifteenMinuteRate"  pname="m15r"  type="float" />
+			<attribute name="FiveMinuteRate"   pname="m5r" type="float" />
+			<attribute name="MeanRate"    pname="mr" type="float" />
+			<attribute name="OneMinuteRate"   pname="m1r" type="float" />
+		</mbean>
+
+		<!--
+		  Sling JMX Bens 
+		  -->
+		<mbean name="org.apache.sling:type=BackgroundObserverStats,name=SlingResourceListener" pname="SlingBackgroundObserverStats" >
+			<attribute name="ExternalEventCount" type="int32"/>
+			<attribute name="LocalEventCount" type="int32"/>
+			<attribute name="MaxQueueSize" type="int32"/>
+			<attribute name="QueueSize" type="int32"/>
+		</mbean>
+
+		<mbean name="org.apache.sling:type=engine,service=RequestProcessor" pname="RequestProcessor" >
+			<attribute name="MaxPeakRecursionDepth" type="int32"/>
+			<attribute name="MaxRequestDurationMsec" type="int32" units="milliseconds" />
+			<attribute name="MaxServletCallCount" type="int32"/>
+			<attribute name="MeanPeakRecursionDepth" type="int32"/>
+			<attribute name="MeanRequestDurationMsec" type="int32" units="milliseconds" />
+			<attribute name="MeanServletCallCount" type="int32" />
+			<attribute name="MinPeakRecursionDepth" type="int32" />
+			<attribute name="MinRequestDurationMsec" type="int32" units="milliseconds" />
+			<attribute name="MinServletCallCount" type="int32" />
+			<attribute name="RequestsCount" type="int32" />
+			<attribute name="StandardDeviationDurationMsec" type="int32" units="milliseconds" />
+			<attribute name="StandardDeviationPeakRecursionDepth" type="int32" />
+			<attribute name="StandardDeviationServletCallCount" type="int32" />
+		</mbean>
+		
+		<!-- there are a number of more stats not entered here -->
+
+		<!-- This is a sample configuration for a Tomcat server (AJP port) -->
+		<!-- <mbean name='Catalina:type=GlobalRequestProcessor,name="ajp-bio-8009"' pname="ajp">
+			<attribute name="requestCount" type="int32" slope="positive" units="hits"/>
+		</mbean> -->
+
+		<!-- This is a sample configuration for a Tomcat server (HTTP port) -->
+		<!-- <mbean name='Catalina:type=GlobalRequestProcessor,name="http-bio-8080"' pname="http">
+			<attribute name="requestCount" type="int32" slope="positive" units="hits"/>
+		</mbean> -->
+
+		<!-- This is a sample configuration for a JBoss 7 server (HTTP port) -->
+		<!-- <mbean name="jboss.as:subsystem=web,connector=http" pname="http">
+			<attribute name="requestCount" type="int32" slope="positive"/>
+		</mbean> -->
+
+		<!-- This is a sample configuration for a HornetQ server (message queue depth for queue named testQueue) -->
+		<!-- <mbean name='org.hornetq:module=Core,type=Queue,address="jms.queue.testQueue",name="jms.queue.testQueue"' pname="queue_testQueue">
+			<attribute name="MessageCount" type="int32" slope="both"/>
+			<attribute name="ConsumerCount" type="int32" slope="both"/>
+		</mbean> -->
+
+                <!-- This is a sample configuration for an Apache ActiveMQ server (message queue named customer.orders) -->
+                <!-- <mbean name='org.apache.activemq:BrokerName=localhost,Type=Queue,Destination=customer.orders' pname="queue_customer_orders">
+                        <attribute name="QueueSize" type="int32" slope="both"/>
+                        <attribute name="ConsumerCount" type="int32" slope="both"/>
+                </mbean> -->
+	</sample>
+	<ganglia hostname="localhost" port="8649" mode="multicast" wireformat31x="true" />
+</jmxetric-config>
