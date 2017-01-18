@@ -47,3 +47,65 @@ The name of the process pre-pended to any metric names.
 The path from the working directory to the jmxetric.xml file, normally and absolute path to avoid confusion. This file will be watched.
 If touched, the configuration will be reloaded.
 
+
+# Configuration files
+
+src/main/conf/jmxetric.xml contains configuration for a standard Sling JVM running Oak TarMK. 
+
+# Test Ganglia install
+
+If you dont have access to a full Ganglia instance with a UI and dont have time to install you can use this monitoing bundle in standalone mode.
+You will need gmond and gmetad. Setup a gmond instance to receive the data over unicast UDP. Make it mute (mute=yes) but not deaf (deaf=no). 
+That done configure a gmetad instance to query the gmond instance and build rrd files as the data comes in. Once you have rrd files you can
+use one of the many rrd viewing tools or use rrdtool itself to generate graphs. For instance on OSX
+
+    brew install ganglia
+
+Run the daemons in foreground
+
+    sudo gmond -f &
+    sudo gmetad -f &
+
+run the java app with the monitor pointing the reporter to send data to UDP 127.0.0.1:8649
+
+Some time later, view the rrd as a graph.
+
+    rrdtool  graph image.png "DEF:segment=/usr/local/var/lib/ganglia/rrds/unspecified/localhost/jvm_SegmentWrites_m15r.rrd:sum:AVERAGE" "LINE1:segment#ff0000:Segment Writes"
+    open image.png
+
+
+gmond.conf  listen on UDP 8649, and TCP 8649
+
+    globals {
+      daemonize = yes
+      setuid = yes
+      user = nobody
+      debug_level = 0
+      max_udp_msg_len = 1472
+      mute = yes
+      deaf = no
+      allow_extra_data = yes
+      host_dmax = 86400 /*secs. Expires (removes from web interface) hosts in 1 day */
+      host_tmax = 20 /*secs */
+      cleanup_threshold = 300 /*secs */
+      gexec = no
+      send_metadata_interval = 30 /*secs */
+    }
+    cluster {
+      name = "development"
+    }
+    udp_recv_channel {
+      port = 8649
+      bind = 127.0.0.1
+      retry_bind = true
+    }
+    tcp_accept_channel {
+      port = 8649
+      gzip_output = no
+    }
+
+gmetad.conf  retrive data from localhost 8649
+
+    data_source "my cluster" 127.0.0.1:8649
+    case_sensitive_hostnames 0
+
