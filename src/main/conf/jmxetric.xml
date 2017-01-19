@@ -164,6 +164,10 @@
 		     If you have already configured the Metrics Ganglia reported, then comment this section and any other Codehale metrics JMX
 		     beans out -->
 
+
+		<!-- If the CodehaleMetricsReporter component is active, this configuration is not needed as those metrics
+		will be reported directly without any configuration. Do check that the Component is configured correctly.
+
 		<mbean name="org.apache.jackrabbit.oak:name=HYBRID_ADDED,type=Metrics" pname="HybridAdded" >
 			<attribute name="Count"  type="int32" />
 			<attribute name="FifteenMinuteRate"  pname="m15r"  type="float" />
@@ -253,6 +257,8 @@
 			<attribute name="MeanRate"    pname="mr" type="float" />
 			<attribute name="OneMinuteRate"   pname="m1r" type="float" />
 		</mbean>
+
+		-->
 
 		<!--
 		  Sling JMX Bens 
