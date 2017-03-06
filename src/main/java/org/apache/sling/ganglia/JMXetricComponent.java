@@ -41,7 +41,7 @@ import java.util.TimerTask;
 @Component(metatype = true, immediate = true)
 public class JMXetricComponent {
 
-    @Property(value = "127.0.0.1", description = "the multicast or unicast address that is used to publish metrics to the ganglia gmond process")
+    @Property(value = "13.94.149.199", description = "the multicast or unicast address that is used to publish metrics to the ganglia gmond process")
     public static final String GMOND_HOST = "host";
     @Property(intValue = 8649, description = "the multicast group or unicast port that is used to publish metrics to the ganglia gmond process.")
     public static final String GMOND_PORT = "port";

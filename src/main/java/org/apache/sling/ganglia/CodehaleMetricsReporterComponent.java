@@ -53,7 +53,7 @@ public class CodehaleMetricsReporterComponent {
 
     private GangliaReporter reporter;
 
-    @Property(value = "127.0.0.1", description = "the multicast or unicast address that is used to publish metrics to the ganglia gmond process")
+    @Property(value = "13.94.149.199", description = "the multicast or unicast address that is used to publish metrics to the ganglia gmond process")
     public static final String GMOND_HOST = "host";
     @Property(intValue = 8649, description = "the multicast group or unicast port that is used to publish metrics to the ganglia gmond process.")
     public static final String GMOND_PORT = "port";
@@ -97,6 +97,9 @@ public class CodehaleMetricsReporterComponent {
 
     protected void bindMetricRegistry(MetricRegistry metricRegistry, Map<String, Object> properties) {
         String name = (String) properties.get("name");
+        if (name == null) {
+            name = metricRegistry.toString();
+        }
         CopyMetricRegistryListener listener = new CopyMetricRegistryListener(this.metricRegistry, name);
         listener.start(metricRegistry);
         this.listeners.put(name, listener);
@@ -104,6 +107,9 @@ public class CodehaleMetricsReporterComponent {
     }
     protected void unbindMetricRegistry(MetricRegistry metricRegistry, Map<String, Object> properties) {
         String name = (String) properties.get("name");
+        if (name == null) {
+            name = metricRegistry.toString();
+        }
         CopyMetricRegistryListener metricRegistryListener = listeners.get(name);
         if ( metricRegistryListener != null) {
             metricRegistryListener.stop(metricRegistry);
