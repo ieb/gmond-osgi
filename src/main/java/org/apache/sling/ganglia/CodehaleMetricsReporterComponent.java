@@ -57,9 +57,9 @@ public class CodehaleMetricsReporterComponent {
     public static final String GMOND_HOST = "host";
     @Property(intValue = 8649, description = "the multicast group or unicast port that is used to publish metrics to the ganglia gmond process.")
     public static final String GMOND_PORT = "port";
-    @Property(intValue = 1, description = "the ttl for UDP packets.")
     @Property(intValue = 5, description = "The period in seconds the reporter reports at")
     public static final String REPORT_PERIOD = "period";
+    @Property(intValue = 1, description = "the ttl for UDP packets.")
     public static final String GMOND_TTL = "ttl";
     @Property(boolValue = false, description = "If true, multicast, if false unicast")
     public static final String GMOND_MULTICAST = "multicast";
