@@ -58,6 +58,8 @@ public class CodehaleMetricsReporterComponent {
     @Property(intValue = 8649, description = "the multicast group or unicast port that is used to publish metrics to the ganglia gmond process.")
     public static final String GMOND_PORT = "port";
     @Property(intValue = 1, description = "the ttl for UDP packets.")
+    @Property(intValue = 5, description = "The period in seconds the reporter reports at")
+    public static final String REPORT_PERIOD = "period";
     public static final String GMOND_TTL = "ttl";
     @Property(boolValue = false, description = "If true, multicast, if false unicast")
     public static final String GMOND_MULTICAST = "multicast";
@@ -74,6 +76,7 @@ public class CodehaleMetricsReporterComponent {
         LOG.info("Starting Ganglia Metrics ");
         String host = (String) properties.get(GMOND_HOST);
         int port = (int) properties.get(GMOND_PORT);
+        int period = (int) properties.get(REPORT_PERIOD);
         boolean multicast = (boolean) properties.get(GMOND_MULTICAST);
         boolean use311Wire  = (boolean) properties.get(GMOND_WIRE_FORMAT_31X);
         String spoof = (String) properties.get(GMOND_SPOOF);
@@ -85,7 +88,7 @@ public class CodehaleMetricsReporterComponent {
                 .convertRatesTo(TimeUnit.SECONDS)
                 .convertDurationsTo(TimeUnit.MILLISECONDS)
                 .build(ganglia);
-        reporter.start(5, TimeUnit.SECONDS);
+        reporter.start(period, TimeUnit.SECONDS);
         LOG.info("Started Ganglia Metrics reporter to {}:{} {} {} ttl:{} ", new Object[]{host, port, multicast ? "multicast" : "unicast", use311Wire ? "311" : "pre311", ttl});
     }
 
